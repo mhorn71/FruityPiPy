@@ -1,0 +1,11 @@
+#!/usr/bin/python
+import sys
+
+
+def mytype(x):
+    f = open(x, 'r')
+    print repr(f.read())
+    f.close()
+
+mytype(sys.argv[1])
+
