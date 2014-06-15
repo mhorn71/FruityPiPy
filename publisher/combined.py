@@ -123,7 +123,7 @@ def mypublisher():
             ax1.set_xlabel('Time (UTC)')
             ax1.set_ylabel('mV')
             ax1.yaxis.set_major_locator(MaxNLocator(integer=True))
-            ax1.set_ylim(0, 1800)
+            ax1.set_ylim(0, 5000)
 
             if art3 == 'true':
                 ax2 = ax1.twinx()
@@ -185,8 +185,8 @@ def mypublisher():
                 ax1.set_title(label0)
                 ax1.set_xlabel("Time (UTC)")
                 ax1.set_ylabel("mV")
-                ax1.set_ylim(0,1800)
-                ax1.set_yticks((0, 360, 720, 1080, 1440, 1800))
+                ax1.set_ylim(0,5000)
+                ax1.set_yticks((0, 1000, 2000, 3000, 4000, 5000))
                 plt.xticks(rotation=30)
 
             if art1 == 'true':
@@ -195,8 +195,8 @@ def mypublisher():
                 ax2.set_title(label1)
                 ax2.set_xlabel("Time (UTC)")
                 ax2.set_ylabel("mV")
-                ax2.set_ylim(0,1800)
-                ax2.set_yticks((0, 360, 720, 1080, 1440, 1800))
+                ax2.set_ylim(0,5000)
+                ax2.set_yticks((0, 1000, 2000, 3000, 4000, 5000))
                 plt.xticks(rotation=30)
 
             if art2 == 'true':
@@ -205,8 +205,8 @@ def mypublisher():
                 ax3.set_title(label2)
                 ax3.set_xlabel("Time (UTC)")
                 ax3.set_ylabel("mV")
-                ax3.set_ylim(0,1800)
-                ax3.set_yticks((0, 360, 720, 1080, 1440, 1800))
+                ax3.set_ylim(0,5000)
+                ax3.set_yticks((0, 1000, 2000, 3000, 4000, 5000))
                 plt.xticks(rotation=30)
 
             if art3 == 'true':
