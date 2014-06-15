@@ -26,7 +26,7 @@ The RaspberryPi comes without an ADC, I used the ADS1115 from Adafruit.
     -------
     http://www.adafruit.com/products/1085
 
-You will need to attach the following temperature sensor to channel 2 of the ADC.
+You will need to attach the following temperature sensor to channel 3 of the ADC.
 
     TMP36 Temperature Sensor
     ------------------------
