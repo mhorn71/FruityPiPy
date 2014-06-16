@@ -25,7 +25,8 @@ You need to install the following additional python packages.
     apt-get install python-pip
     pip install crcmod
     pip install matplotlib
-    pip install psutils
+    apt-get install python-dev (need to supply python.h for psutil compilation)
+    pip install psutil
 
 The RaspberryPi comes without an ADC, I used the ADS1115 from Adafruit.
 
