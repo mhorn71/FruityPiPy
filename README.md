@@ -8,25 +8,17 @@ Install Instructions
 
 You need to install the following additional python packages.
 
-    crcmod
-    ------
-    https://pypi.python.org/pypi/crcmod/1.7
-
-    psutils
-    -------
-    https://code.google.com/p/psutil/
-
-    matplotlib
-    ----------
-    https://github.com/matplotlib/matplotlib
-
     You can install the above using apt-get and pip as the root user or using sudo with the following commands:
 
-    apt-get install python-pip
+    apt-get install python-smbus i2c-tools python-pip python-dev
     pip install crcmod
     pip install matplotlib
-    apt-get install python-dev (need to supply python.h for psutil compilation)
     pip install psutil
+
+    read the following Adafruit article on setting up i2c on the Pi
+
+    https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c
+
 
 The RaspberryPi comes without an ADC, I used the ADS1115 from Adafruit.
 
