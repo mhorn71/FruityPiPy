@@ -20,6 +20,13 @@ You need to install the following additional python packages.
     ----------
     https://github.com/matplotlib/matplotlib
 
+    You can install the above using apt-get and pip as the root user or using sudo with the following commands:
+
+    apt-get install python-pip
+    pip install crcmod
+    pip install matplotlib
+    pip install psutils
+
 The RaspberryPi comes without an ADC, I used the ADS1115 from Adafruit.
 
     ADS1115
