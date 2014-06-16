@@ -12,7 +12,7 @@ You need to install the following additional python packages.
 
     apt-get install python-smbus i2c-tools python-pip python-dev
     pip install crcmod
-    pip install matplotlib
+    pip install python-matplotlib
     pip install psutil
 
     read the following Adafruit article on setting up i2c on the Pi
