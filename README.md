@@ -43,9 +43,7 @@ Software install
         memory/module/0
         memory/module/1
 
-    3.) edit the StarinetBeagleLogger.conf file and set the full path of where you want the pid file to live.
+    3.) Start as root.
 
-    4.) Start as root.
-
-    5.) Download Starbase from ukraa.com/builds/beta and set the IP address of your
+    4.) Download Starbase from ukraa.com/builds/beta and set the IP address of your
         RaspberryPi in the file FruityPiPyLogger-instrument.xml
