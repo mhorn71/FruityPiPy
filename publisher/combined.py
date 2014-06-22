@@ -142,16 +142,16 @@ def mypublisher():
             fig.autofmt_xdate()
 
             # set grid
-            plt.grid()
+            plt.grid(axis='y')
 
             # set tight layout
-            plt.tight_layout()
+            plt.tight_layout(pad=3.08)
 
             #plt.show()
             plt.savefig("chart.png")
 
             # clear last figure clf() see if it helps with memory usage.
-            fig.clf()
+            #fig.clf()
 
             # close all figures to see if it helps with memory?
             plt.close('all')
