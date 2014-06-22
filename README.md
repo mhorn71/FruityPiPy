@@ -6,6 +6,10 @@ FruityPiPy
 Install Instructions
 ====================
 
+FruityPiPy has been developed on minibian and cannot be guaranteed to work on any other OS.
+
+    http://minibianpi.wordpress.com/
+
 You need to install the following additional python packages.
 
     You can install the above using apt-get and pip as the root user or using sudo with the following commands:
