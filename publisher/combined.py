@@ -142,10 +142,10 @@ def mypublisher():
             fig.autofmt_xdate()
 
             # set grid
-            plt.grid(axis='y')
+            plt.grid()
 
             # set tight layout
-            plt.tight_layout(pad=3.08)
+            #plt.tight_layout(pad=3.00,pad_w=float)
 
             #plt.show()
             plt.savefig("chart.png")

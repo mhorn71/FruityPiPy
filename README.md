@@ -6,9 +6,9 @@ FruityPiPy
 Install Instructions
 ====================
 
-FruityPiPy has been developed on minibian and cannot be guaranteed to work on any other OS.
+FruityPiPy has been developed on Raspbian and cannot be guaranteed to work on any other OS.
 
-    http://minibianpi.wordpress.com/
+    http://www.raspberrypi.org/downloads/
 
 You need to install the following additional python packages.
 
@@ -16,13 +16,19 @@ You need to install the following additional python packages.
 
     apt-get install python-smbus i2c-tools python-pip python-dev
     pip install crcmod
-    pip install python-matplotlib
     pip install psutil
 
-    read the following Adafruit article on setting up i2c on the Pi
+Add the following two lines to /etc/modules and then reboot the Pi.
 
-    https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c
+    i2c-bcm2708
+    i2c-dev
 
+Matplotlib and the Raspberry Pi.
+
+    Please note the default package for matplotlib currently in the Raspbian repositories is out of date
+    and broken, you will need to build matplotlib 1.2.1 from source which can be obtained from
+    http://matplotlib.org/downloads.html follow the instructions provided.  If you require additional help
+    please ask on the BAA Radio Astronomy Group Yahoogroup.
 
 The RaspberryPi comes without an ADC, I used the ADS1115 from Adafruit.
 
@@ -43,9 +49,6 @@ Software install
     2.) create the following folders in the folder you extract the code too.
         run
         memory/data
-        memory/module
-        memory/module/0
-        memory/module/1
 
     3.) Start as root.
 
