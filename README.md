@@ -12,7 +12,8 @@ FruityPiPy has been developed on Raspbian and cannot be guaranteed to work on an
 
 You need to install the following additional python packages.
 
-    You can install the above using apt-get and pip as the root user or using sudo with the following commands:
+    You can install the above using apt-get and pip as the root user or using sudo with the following
+    commands:
 
     apt-get install python-smbus i2c-tools python-pip python-dev
     pip install crcmod
