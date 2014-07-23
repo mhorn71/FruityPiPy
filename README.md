@@ -15,7 +15,7 @@ You need to install the following additional python packages.
     You can install the above using apt-get and pip as the root user or using sudo with the following
     commands:
 
-    apt-get install python-smbus i2c-tools python-pip python-dev
+    apt-get install python-smbus i2c-tools python-pip python-dev libpng12-dev
     pip install crcmod
     pip install psutil
 
