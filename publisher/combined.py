@@ -129,6 +129,8 @@ def mypublisher():
 
             if autoscale == 'false':
                 ax1.set_ylim(0, 5000)
+            else:
+                ax1.margins(0, 1)
 
             if art3 == 'true':
                 ax2 = ax1.twinx()
@@ -142,6 +144,7 @@ def mypublisher():
 
             if art3 == 'true':
                 ax2.legend(loc = 'upper right')
+
 
             # auto format date axis
             fig.autofmt_xdate()
@@ -194,6 +197,8 @@ def mypublisher():
                 if autoscale == 'false':
                     ax1.set_ylim(0,5000)
                     ax1.set_yticks((0, 1000, 2000, 3000, 4000, 5000))
+                else:
+                    ax1.margins(0, 1)
 
                 plt.xticks(rotation=30)
 
@@ -207,6 +212,8 @@ def mypublisher():
                 if autoscale == 'false':
                     ax2.set_ylim(0,5000)
                     ax2.set_yticks((0, 1000, 2000, 3000, 4000, 5000))
+                else:
+                    ax2.margins(0, 1)
 
                 plt.xticks(rotation=30)
 
@@ -220,6 +227,8 @@ def mypublisher():
                 if autoscale == 'false':
                     ax3.set_ylim(0,5000)
                     ax3.set_yticks((0, 1000, 2000, 3000, 4000, 5000))
+                else:
+                    ax3.margins(0, 1)
 
                 plt.xticks(rotation=30)
 
