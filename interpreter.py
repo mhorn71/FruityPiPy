@@ -166,7 +166,7 @@ def processor(buffer0):
                             x = setPublisherLabels.control(data[1], data[2], data[3])
                         elif re.match('05070000', command):  # setPublisherArtist
                             logger.debug("Matched command setPublisherArtist")
-                            x = setPublisherArtist.control(data[1], data[2], data[3], data[4], data[5])
+                            x = setPublisherArtist.control(data[1], data[2], data[3], data[4], data[5], data[6])
                         elif re.match('05010000', command):  # publisher
                             logger.debug("Matched command publisher")
                             x = capturePublisher.control(data[1])

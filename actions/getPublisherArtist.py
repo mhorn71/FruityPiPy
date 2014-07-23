@@ -20,13 +20,14 @@ def control():
         channel1 = config.get("publisherartist", "channelArt1")
         channel2 = config.get("publisherartist", "channelArt2")
         temperature = config.get("publisherartist", "TemperatureArt")
+        autoscale = config.get("publisherartist", "autoscale")
     except ConfigParser.Error as e:
         status = 4
         value = e
         logger.critical("%s %s", "Unable to get publisher artist parameters from config", e)
     else:
         status = 0
-        value = chart + ',' + channel0 + ',' + channel1 + ',' + channel2 + ',' + temperature
+        value = chart + ',' + channel0 + ',' + channel1 + ',' + channel2 + ',' + temperature + ',' autoscale
         logger.debug("%s %s", "returning value ", value)
 
     status = status + samplerstatus.status()

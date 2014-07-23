@@ -10,10 +10,10 @@ logger = logging.getLogger('actions.setPublisherArtist')
 config = ConfigParser.RawConfigParser()
 
 
-def control(buffer0, buffer1, buffer2, buffer3, buffer4):
+def control(buffer0, buffer1, buffer2, buffer3, buffer4, buffer5):
 
     logger.debug("setPublisherArtist called")
-    logger.debug("%s %s %s %s %s", buffer0, buffer1, buffer2, buffer3, buffer4)
+    logger.debug("%s %s %s %s %s", buffer0, buffer1, buffer2, buffer3, buffer4, buffer5)
 
     if publisherstatus.status() == 0:
         status = 2  # ABORT
@@ -26,6 +26,7 @@ def control(buffer0, buffer1, buffer2, buffer3, buffer4):
             config.set('publisherartist', 'channelArt1', buffer2)  # update
             config.set('publisherartist', 'channelArt2', buffer3)  # update
             config.set('publisherartist', 'temperatureArt', buffer4)  # update
+            config.set('publisherartist', 'autoscale', buffer5)
             with open('StarinetBeagleLogger.conf', 'wb') as configfile:
                 config.write(configfile)
                 configfile.close()
