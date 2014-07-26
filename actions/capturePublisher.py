@@ -28,6 +28,10 @@ def control(buffer0):
 
     config.set('systemstate', 'publisher', buffer0)
 
+    with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                config.write(configfile)
+                configfile.close()
+
     if buffer0 == 'true':
 
         logger.debug("Entered true routine")

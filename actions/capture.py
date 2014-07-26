@@ -26,6 +26,11 @@ def control(buffer0):
 
     config.set('systemstate', 'capture', buffer0)
 
+    with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                config.write(configfile)
+                configfile.close()
+
+
     if buffer0 == 'true':
 
         logger.debug("Entered true routine")
@@ -36,6 +41,8 @@ def control(buffer0):
             logger.debug("%s %s", "samplerstatus reports sampler not active", str(samplerstatus.status()))
             
             folder = config.get('paths', 'datafolder')
+
+
 
             for the_file in os.listdir(folder):
                 file_path = os.path.join(folder, the_file)
