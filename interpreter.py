@@ -201,6 +201,9 @@ def processor(buffer0):
                         elif re.match('06010000', command):  # dataPublisher
                             logger.debug("Matched command dataPublisher")
                             x = dataPublisher.control(data[1])
+                        elif re.match('000F0000', command):  # controllerControl
+                            logger.debug("Matched command controllerControl")
+                            x = controllerControl.control(data[1])
                         else:
                             logger.debug("Matched command - NO MATCH")
                             x = 20, None 
