@@ -27,6 +27,10 @@ import actions.getPublisherLabels as getPublisherLabels
 import actions.setPublisherArtist as setPublisherArtist
 import actions.getPublisherArtist as getPublisherArtist
 import utilities.samplerstatus as samplerstatus
+import actions.controllerControl as controllerControl
+import actions.getDataPublisher as getDataPublisher
+import actions.setDataPublisher as setDataPublisher
+import actions.dataPublisher as dataPublisher
 
 ## initialise logger
 logger = logging.getLogger('interpreter')
@@ -123,7 +127,11 @@ def processor(buffer0):
                             logger.debug("Matched command getPublisher")
                             x = getPublisher.control()
                         elif re.match('05060000', command): # getPublisherArtist
+                            logger.debug("Matched command getPublisherArtist")
                             x = getPublisherArtist.control()
+                        elif re.match('06030000', command): # getDataPublisher
+                            logger.debug("Matched command getDataPublisher")
+                            x = getDataPublisher.control()
                         ############ Logger Plugin ############
                         elif re.match('04000000', command):  # getRealTimeData
                             logger.debug("Matched command getRealTimeData")
@@ -187,6 +195,12 @@ def processor(buffer0):
                         elif re.match('03060000', command):  # capture
                             logger.debug("Matched command capture")
                             x = capture.control(data[1])
+                        elif re.match('06020000', command):  # setDataPublisher
+                            logger.debug("Matched command setDataPublisher")
+                            x = setDataPublisher.control(data[1], data[2], data[3], data[4], data[5], data[6])
+                        elif re.match('06010000', command):  # dataPublisher
+                            logger.debug("Matched command dataPublisher")
+                            x = dataPublisher.control(data[1])
                         else:
                             logger.debug("Matched command - NO MATCH")
                             x = 20, None 
