@@ -90,6 +90,15 @@ def control(buffer0):
 
             if publisherstatus.status() == 0:
                 logger.debug("%s %s", "publisher running terminating first", str(publisherstatus.status()))
+
+                config.read("StarinetBeagleLogger.conf")
+
+                config.set('systemstate', 'publisher', buffer0)
+
+                with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                    config.write(configfile)
+                    configfile.close()
+
                 try:
                     pidfile = open(config.get('publisher', 'pidfile'), 'r')
                     pid = int(pidfile.read())
