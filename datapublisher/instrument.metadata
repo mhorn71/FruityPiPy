@@ -1,0 +1,23 @@
+Observation.Axis.Label.X,Time (UT),String,Dimensionless,
+Observation.Axis.Label.Y.0,Multichannel Outputs,String,Dimensionless,
+Observation.Channel.Colour.0,r=255 g=102 b=000,ColourData,Dimensionless,The Colour of the Channel 0 graph
+Observation.Channel.Colour.1,r=255 g=153 b=000,ColourData,Dimensionless,The Colour of the Channel 1 graph
+Observation.Channel.Colour.2,r=255 g=204 b=000,ColourData,Dimensionless,The Colour of the Channel 2 graph
+Observation.Channel.Colour.Temperature,r=255 g=000 b=000,ColourData,Dimensionless,The Colour of the Temperature channel graph
+Observation.Channel.Count,4,DecimalInteger,Dimensionless,The number of channels of data produced by this Instrument
+Observation.Channel.DataType.0,DecimalInteger,DataType,Dimensionless,The DataType of channel 0
+Observation.Channel.DataType.1,DecimalInteger,DataType,Dimensionless,The DataType of channel 1
+Observation.Channel.DataType.2,DecimalInteger,DataType,Dimensionless,The DataType of channel 2
+Observation.Channel.DataType.Temperature,DecimalFloat,DataType,Dimensionless,The DataType of the Temperature channel
+Observation.Channel.Description.0,The output from Channel 0,String,Dimensionless,The Description of channel 0
+Observation.Channel.Description.1,The output from Channel 1,String,Dimensionless,The Description of channel 1
+Observation.Channel.Description.2,The output from Channel 2,String,Dimensionless,The Description of channel 2
+Observation.Channel.Description.Temperature,The temperature of the Controller module,String,Dimensionless,The Description of the Temperature channel
+Observation.Channel.Name.0,Channel 0,String,Dimensionless,The name of channel 0
+Observation.Channel.Name.1,Channel 1,String,Dimensionless,The name of channel 1
+Observation.Channel.Name.2,Channel 2,String,Dimensionless,The name of channel 2
+Observation.Channel.Name.Temperature,Temperature,String,Dimensionless,The name of the Temperature channel
+Observation.Channel.Units.0,mV,Units,Dimensionless,The Units of channel 0
+Observation.Channel.Units.1,mV,Units,Dimensionless,The Units of channel 1
+Observation.Channel.Units.2,mV,Units,Dimensionless,The Units of channel 2
+Observation.Channel.Units.Temperature,Celsius,Units,Dimensionless,The Units of the Temperature channel

@@ -1,0 +1,12 @@
+Observer.Address.Line1,Observer Address Line 1,String,Dimensionless,Line 1 of the Observer postal address
+Observer.Address.Line2,Observer Address Line 2,String,Dimensionless,Line 2 of the Observer postal address
+Observer.Address.Line3,Observer Address Line 3,String,Dimensionless,Line 3 of the Observer postal address
+Observer.Address.Line4,Observer Address Line 4,String,Dimensionless,Line 4 of the Observer postal address
+Observer.Address.Postcode,XY01 0AB,String,Dimensionless,The Observer Postcode (Zip Code)
+Observer.Contact.Email,starbase@ukraa.com,String,Dimensionless,The email address of the Observer
+Observer.Contact.Telephone,+44 123 999999,String,Dimensionless,The Observer telephone number
+Observer.Contact.URL,http://www.ukraa.com/starbase,URL,Dimensionless,The Observer website URL
+Observer.Country,GB,String,Dimensionless,The Country containing the Observer
+Observer.Description,The really observant Observer,String,Dimensionless,The description of the Observer
+Observer.Name,Oculo Gyric,String,Dimensionless,The name of the Observer
+Observer.Notes,Observer Notes,String,Dimensionless,The Observer Notes

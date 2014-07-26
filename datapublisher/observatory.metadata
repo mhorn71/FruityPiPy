@@ -1,0 +1,22 @@
+Observatory.Address.Line1,Observatory Address Line 1,String,Dimensionless,Line 1 of the Observatory postal address
+Observatory.Address.Line2,Observatory Address Line 2,String,Dimensionless,Line 2 of the Observatory postal address
+Observatory.Address.Line3,Observatory Address Line 3,String,Dimensionless,Line 3 of the Observatory postal address
+Observatory.Address.Line4,Observatory Address Line 4,String,Dimensionless,Line 4 of the Observatory postal address
+Observatory.Address.Postcode,AB01 0XY,String,Dimensionless,The Observatory Postcode (Zip Code)
+Observatory.Contact.Email,starbase@ukraa.com,String,Dimensionless,The email address of the Observatory
+Observatory.Contact.Telephone,+44 473 000000,String,Dimensionless,The Observatory telephone number
+Observatory.Contact.URL,http://www.ukraa.com/www/starbase.html,URL,Dimensionless,The Observatory website URL
+Observatory.Country,GB,String,Dimensionless,The Country containing the Observatory (ISO 3166)
+Observatory.Description,The Starbase Observatory is in deepest Suffolk,String,Dimensionless,The description of the Observatory
+Observatory.GeodeticDatum,WGS84,String,Dimensionless,The GeodeticDatum used by the Observatory
+Observatory.GeomagneticLatitude,+00:00:00.000,Latitude,DegMinSec,The GeomagneticLatitude of the Observatory (North is positive) -89:59:59.9999 to +00:00:00.0000 to +89:59:59.9999
+Observatory.GeomagneticLongitude,+000:00:00.000,Longitude,DegMinSec,The GeomagneticLongitude of the Observatory (West is positive)  -179:59:59.9999 to +000:00:00.0000 to +179:59:59.9999
+Observatory.GeomagneticModel,IGRF-11,String,Dimensionless,The GeomagneticModel used by the Observatory
+Observatory.HASL,0.0,DecimalFloat,m,The Height of the Observatory above Sea Level in metres
+Observatory.Language,en,String,Dimensionless,The Language of the Observatory User (ISO 639-2)
+Observatory.Latitude,+00:00:00.001,Latitude,DegMinSec,The Latitude of the Framework (North is positive)  -89:59:59.9999 to +00:00:00.0000 to +89:59:59.9999
+Observatory.Longitude,+000:00:00.001,Longitude,DegMinSec,The Longitude of the Observatory (West is positive)  -179:59:59.9999 to +000:00:00.0000 to +179:59:59.9999
+Observatory.MaidenheadLocator,JO02pb,String,Dimensionless,The MaidenheadLocator for the Observatory
+Observatory.Name,The Starbase Observatory,String,Dimensionless,The name of the Observatory
+Observatory.Notes,Observatory Notes,String,Dimensionless,The Observatory Notes
+Observatory.TimeZone,GMT+00:00,TimeZone,Dimensionless,The TimeZone containing the Observatory  GMT-23:59 to GMT+00:00 to GMT+23:59
