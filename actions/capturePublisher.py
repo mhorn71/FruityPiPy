@@ -26,6 +26,8 @@ def control(buffer0):
 
     nx = publisherstatus.status()
 
+    config.set('systemstate', 'publisher', buffer0)
+
     if buffer0 == 'true':
 
         logger.debug("Entered true routine")

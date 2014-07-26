@@ -24,6 +24,8 @@ def control(buffer0):
 
     logger.debug("%s %s", "Capture buffer0 ", buffer0)
 
+    config.set('systemstate', 'capture', buffer0)
+
     if buffer0 == 'true':
 
         logger.debug("Entered true routine")
