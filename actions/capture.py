@@ -41,20 +41,19 @@ def control(buffer0):
             
             folder = config.get('paths', 'datafolder')
 
+            if config.get('systemstate','capture') == 'false':
+                for the_file in os.listdir(folder):
+                    file_path = os.path.join(folder, the_file)
+                    try:
+                        if os.path.isfile(file_path):
+                                os.unlink(file_path)
+                        logger.debug("%s %s", "Removing data file ", file_path)
+                    except OSError as e:
+                            logger.critical("%s %s", "premature termination", e)
+                            status = 4
 
-
-            for the_file in os.listdir(folder):
-                file_path = os.path.join(folder, the_file)
-                try:
-                    if os.path.isfile(file_path):
-                            os.unlink(file_path)
-                    logger.debug("%s %s", "Removing data file ", file_path)
-                except OSError as e:
-                        logger.critical("%s %s", "premature termination", e)
-                        status = 4
-                    
-            f = open(config.get("paths", "datafolder") + '0000', 'wb')
-            f.close()
+                f = open(config.get("paths", "datafolder") + '0000', 'wb')
+                f.close()
             
             try:
                 pro = subprocess.Popen(["/usr/bin/python", "logger/sampler.py"])
@@ -62,6 +61,13 @@ def control(buffer0):
                 logger.critical("%s %s", "premature termination", e)
                 logger.critical("Unable to start capture")
                 status = 4
+
+                config.set('systemstate', 'capture', 'false')
+
+                with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                            config.write(configfile)
+                            configfile.close()
+
             else:
                 try:
                     pidfile = open(config.get('paths', 'pidfile'), 'w')
