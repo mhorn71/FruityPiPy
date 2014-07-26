@@ -12,7 +12,6 @@ import sys
 logger = logging.getLogger('actions.capturePublisher')
 
 config = ConfigParser.RawConfigParser()
-#config.read("StarinetBeagleLogger.conf")
 
 
 def control(buffer0):
@@ -22,15 +21,15 @@ def control(buffer0):
 
     config.read("StarinetBeagleLogger.conf")
 
-    logger.debug("%s %s", "capturePublisher buffer0 ", buffer0)
-
-    nx = publisherstatus.status()
-
     config.set('systemstate', 'publisher', buffer0)
 
     with open('StarinetBeagleLogger.conf', 'wb') as configfile:
                 config.write(configfile)
                 configfile.close()
+
+    logger.debug("%s %s", "capturePublisher buffer0 ", buffer0)
+
+    nx = publisherstatus.status()
 
     if buffer0 == 'true':
 

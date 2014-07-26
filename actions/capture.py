@@ -12,7 +12,6 @@ import sys
 logger = logging.getLogger('actions.capture')
 
 config = ConfigParser.RawConfigParser()
-#config.read("StarinetBeagleLogger.conf")
 
 
 def control(buffer0):
