@@ -18,7 +18,7 @@ def control(buffer0, buffer1, buffer2, buffer3, buffer4, buffer5):
 
     if datapublisherstatus.status() == 0:
         status = 2  # ABORT
-        value = 'capturePublisher_ACTIVE'
+        value = 'dataPublisher_ACTIVE'
     else:
         try:
             config.read("StarinetBeagleLogger.conf")
