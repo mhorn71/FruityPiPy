@@ -6,6 +6,9 @@ import logging
 import logging.config
 import ConfigParser
 import time
+import actions.capture as capture
+import actions.capturePublisher as capturePublisher
+import actions.dataPublisher as dataPublisher
 
 ## initialise logger
 logging.config.fileConfig('StarinetBeagleLogger.conf', disable_existing_loggers=False)
@@ -71,6 +74,21 @@ class Process(threading.Thread):
 
 
 if __name__ == '__main__':
+
+    # Restart capture and publishers if they were active before reboot.
+
+    if config.get('systemstate', 'capture') == 'true':
+        xn = capture.control('true')
+        logger.info('%s %s', "Capture restart", xn)
+
+    if config.get('systemstate', 'publisher') == 'true':
+        xn = capturePublisher.control('true')
+        logger.info('%s %s', "Publisher restart", xn)
+
+    if config.get('systemstate', 'datapublisher') == 'true':
+        xn = dataPublisher.control('true')
+        logger.info('%s %s', "DataPublisher restart", xn)
+
 
     # Create socket (IPv4 protocol, datagram (UDP)) and bind to address
     try:
