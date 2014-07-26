@@ -23,13 +23,6 @@ def control(buffer0):
 
     logger.debug("%s %s", "Capture buffer0 ", buffer0)
 
-    config.set('systemstate', 'capture', buffer0)
-
-    with open('StarinetBeagleLogger.conf', 'wb') as configfile:
-                config.write(configfile)
-                configfile.close()
-
-
     if buffer0 == 'true':
 
         logger.debug("Entered true routine")
@@ -41,7 +34,10 @@ def control(buffer0):
             
             folder = config.get('paths', 'datafolder')
 
-            if config.get('systemstate','capture') == 'false':
+            logger.debug("%s %s", "systemstate capture", config.get('systemstate', 'capture'))
+
+            if config.get('systemstate', 'capture') == 'false':
+                logger.debug('%s %s', 'Removing previous data files - capture started')
                 for the_file in os.listdir(folder):
                     file_path = os.path.join(folder, the_file)
                     try:
@@ -79,6 +75,13 @@ def control(buffer0):
                     status = 4
                 else:
                     logger.debug("Started logger/sampler ....")
+
+                    config.set('systemstate', 'capture', buffer0)
+
+                    with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                                config.write(configfile)
+                                configfile.close()
+
                     status = 0
         else:
             logger.debug("premature termination")
@@ -146,6 +149,14 @@ def control(buffer0):
                         logger.critical("%s %s", "Unable to remove pid file fatal error", e)
                         status = 4
                     else:
+                        config.read("StarinetBeagleLogger.conf")
+
+                        config.set('systemstate', 'capture', buffer0)
+
+                        with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                            config.write(configfile)
+                            configfile.close()
+
                         status = 0
 
     else:
