@@ -16,13 +16,10 @@ config.read("StarinetBeagleLogger.conf")
 rate = int(config.get('capture', 'rate').lstrip("0"))
 strrate = config.get('capture', 'rate')
 datafolder = config.get("paths", "datafolder")
-datafile = '0000'
 
 ## initialise next_call
 next_call = time.time()
 lock = threading.Lock()
-
-ptn = 0
 
 
 def mylogger():
@@ -92,5 +89,40 @@ def mylogger():
         
     lock.release()
 
+datafile0000 = datafolder + '0000'
 
-mylogger()
+print 'datafile = ', datafile0000
+
+if os.stat(datafile0000)[6] == 0:  # check to see if first data file is zero bytes.
+    print "Datafile is zero bytes"
+    datafile = '0000'
+    ptn = 0
+    mylogger()
+else:  # As first data file was zero bytes assume we're doing a restart after power outage
+    print "Datafile is not zero bytes"
+    # Find number of last block in data folder and increase by 1
+    lastblock = int(max(os.listdir(config.get("paths", "datafolder")),
+                        key=lambda p: os.path.getctime(os.path.join(
+                        config.get("paths", "datafolder"), p))), 16) + 1
+    
+    ptn = lastblock  # set ptn number to last block plus one.
+    print "ptn = ", str(ptn)
+    datafile = str(hex(lastblock).split('x')[1].upper().zfill(4))  # our new datafile in hex
+    print "New data file is ", datafile 
+
+    ###############
+    # This next bit is wrong but works kind of.
+    # I need to open the last data file and get the time and then work out when
+    # to schedule the next sample to ensure we don't have data overlap based on the sample rate.
+
+    stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #
+    ###############
+
+    f = open(config.get("paths", "datafolder") + datafile, 'wb')
+
+    data = str(stamp) + ' ' + temperature.read() + ' ' + strrate + '   '
+    f.write(data)        
+    f.close()
+
+    mylogger()
