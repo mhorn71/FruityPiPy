@@ -65,14 +65,16 @@ def mylogger():
                 print "Unable to assign pid to pro.pid capture.py"
             else:
                 try:
-                    os.kill(pid, signal.SIGTERM)
+                    os.remove(str(config.get('paths', 'pidfile')))
                 except OSError as e:
-                    print "Unable to kill process logger/sampler"
+                        print "Unable to remove pid file fatal error", e
                 else:
                     try:
-                        os.remove(str(config.get('paths', 'pidfile')))
+                        os.kill(pid, signal.SIGTERM)
                     except OSError as e:
-                        print "Unable to remove pid file fatal error", e
+                        print "Unable to kill process logger/sampler"
+
+
 
         f = open(datafolder + datafile, 'wb')
         samplerdata = ''.join(readadc.read())
