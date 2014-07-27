@@ -128,7 +128,7 @@ else:  # As first data file was zero bytes assume we're doing a restart after po
 
     #  Assign date time string to lastdatelst list
 
-    lastdatelst = re.findall('^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$', block)  # find date time string
+    lastdatelst = re.findall('^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}', block)  # find date time string
 
     # split lastdatelst into lastdate and lasttime
 
