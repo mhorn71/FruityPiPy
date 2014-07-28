@@ -65,13 +65,13 @@ Software install
 
         next run:
 
-            supervisor update (This will automatically start the software.
+            supervisorctl update (This will automatically start the software.
 
         use the following commands to control the service.
 
-        supervisor stop fruitypipy
-        supervisor start fruitypipy
-        supervisor restart fruitypipy
+        supervisorctl stop fruitypipy
+        supervisorctl start fruitypipy
+        supervisorctl restart fruitypipy
 
     4.) Download Starbase from ukraa.com/builds/beta and set the IP address of your
         RaspberryPi in the file FruityPiPyLogger-instrument.xml
