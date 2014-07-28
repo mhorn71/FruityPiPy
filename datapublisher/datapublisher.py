@@ -17,24 +17,25 @@ def myDataPublisher():
 
     if config.get('systemstate', 'datapublisher') == 'true':
 
-    # Check to see if capturePublisher is running if it is stop it.
-    if publisherstatus.status() == 0:  # if capturePublisher active true
-        config.set('systemstate', 'datapublisherpub', 'true')
-        with open('StarinetBeagleLogger.conf', 'wb') as configfile:
-                config.write(configfile)
-                configfile.close()
-        capPub = 1
-        capturePublisher.control('false')
-    else:
-        config.set('systemstate', 'datapublisherpub', 'false')
-        with open('StarinetBeagleLogger.conf', 'wb') as configfile:
-                config.write(configfile)
-                configfile.close()
-        capPub = 0
+        # Check to see if capturePublisher is running if it is stop it.
 
-    # Check to see if capture is running which is should be and stop it.
-    if samplerstatus.status() == 8000:  # if capture active true
-        capture.control('false')
+        if publisherstatus.status() == 0:  # if capturePublisher active true
+            config.set('systemstate', 'datapublisherpub', 'true')
+            with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                    config.write(configfile)
+                    configfile.close()
+            capPub = 1
+            capturePublisher.control('false')
+        else:
+            config.set('systemstate', 'datapublisherpub', 'false')
+            with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                    config.write(configfile)
+                    configfile.close()
+            capPub = 0
+
+        # Check to see if capture is running which is should be and stop it.
+        if samplerstatus.status() == 8000:  # if capture active true
+            capture.control('false')
 
 
 
