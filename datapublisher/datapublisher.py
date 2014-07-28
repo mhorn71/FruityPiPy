@@ -15,11 +15,21 @@ config.read("StarinetBeagleLogger.conf")
 
 def myDataPublisher():
 
+    if config.get('systemstate', 'datapublisher') == 'true':
+
     # Check to see if capturePublisher is running if it is stop it.
     if publisherstatus.status() == 0:  # if capturePublisher active true
+        config.set('systemstate', 'datapublisherpub', 'true')
+        with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                config.write(configfile)
+                configfile.close()
         capPub = 1
         capturePublisher.control('false')
     else:
+        config.set('systemstate', 'datapublisherpub', 'false')
+        with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                config.write(configfile)
+                configfile.close()
         capPub = 0
 
     # Check to see if capture is running which is should be and stop it.
@@ -42,6 +52,7 @@ def myDataPublisher():
 
 
     # Format date and time for RawData filename
+    # Change this to get date and time from block 0000
     daystamp = datetime.datetime.now().strftime("%Y%m%d")
     timestamp = datetime.datetime.now().strftime("%H%M%S")
 
