@@ -75,3 +75,5 @@ Software install
 
     4.) Download Starbase from ukraa.com/builds/beta and set the IP address of your
         RaspberryPi in the file FruityPiPyLogger-instrument.xml
+
+        You need Starbase-Beta version 2.2.1.1870 or above.
