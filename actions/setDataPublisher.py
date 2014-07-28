@@ -1,5 +1,5 @@
 __author__ = 'mark'
-import utilities.publisherstatus as datapublisherstatus
+import utilities.datapublisherstatus as datapublisherstatus
 import utilities.samplerstatus as samplerstatus
 import ConfigParser
 import logging
