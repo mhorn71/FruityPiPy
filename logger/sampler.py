@@ -8,6 +8,7 @@ import readadc
 import temperature
 import signal
 import re
+import logging
 
 ## initialise config parser
 config = ConfigParser.RawConfigParser()
@@ -22,16 +23,21 @@ datafolder = config.get("paths", "datafolder")
 next_call = time.time()
 lock = threading.Lock()
 
+##initialise logger
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                        filename=config.get('sampler', 'samplerlogfile'),
+                        level=logging.INFO)
+
 
 def mylogger():
-    
+
     lock.acquire()
 
     global ptn
     global next_call
     global rate
     global datafolder
-    global datafile 
+    global datafile
     global strrate
 
     # immediately set schedule of next sample.
@@ -43,6 +49,7 @@ def mylogger():
 
     #set the first sample time stamp
     stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 
     f.readline()
 
@@ -89,7 +96,7 @@ def mylogger():
         data = str(samplerdata)
         f.write(data)
         f.close()
-        
+
     lock.release()
 
 datafile0000 = datafolder + '0000'
@@ -97,21 +104,22 @@ datafile0000 = datafolder + '0000'
 print 'datafile = ', datafile0000
 
 if os.stat(datafile0000)[6] == 0:  # check to see if first data file is zero bytes.
-    print "Datafile is zero bytes"
+    logger.info("%s", "Data Block 0000 is zero bytes starting sampler")
     datafile = '0000'
     ptn = 0
     mylogger()
 else:  # As first data file was zero bytes assume we're doing a restart after power outage
-    print "Datafile is not zero bytes"
+    logger.info("%s", "Restart after fatal error or power outage")
+    logger.info("%s", "Data Block 0000 is not zero bytes")
     # Find number of last block in data folder and increase by 1
     newblock = int(max(os.listdir(config.get("paths", "datafolder")),
                         key=lambda p: os.path.getctime(os.path.join(
                         config.get("paths", "datafolder"), p))), 16) + 1
-    
+
     ptn = newblock  # set ptn number to last block plus one.
     print "ptn = ", str(ptn)
     datafile = str(hex(newblock).split('x')[1].upper().zfill(4))  # our new datafile in hex
-    print "New data file is ", datafile 
+    logger.info("%s %s", "Next new data block is ", datafile)
 
     ###############
     # Get the lastblock written too and read block and assign to block
@@ -163,7 +171,8 @@ else:  # As first data file was zero bytes assume we're doing a restart after po
     f = open(config.get("paths", "datafolder") + datafile, 'wb')
 
     data = str(stamp) + ' ' + temperature.read() + ' ' + strrate + '   '
-    f.write(data)        
+    f.write(data)
     f.close()
 
     mylogger()
+

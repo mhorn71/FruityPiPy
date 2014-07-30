@@ -1,177 +1,169 @@
-__author__ = 'mark'
+import os.path
+import subprocess
+import utilities.samplerstatus as samplerstatus
+import utilities.publisherstatus as publisherstatus
 import ConfigParser
-import datetime
-import time
-import os
-import threading
-import readadc
-import temperature
 import signal
-import re
 import logging
+import sys
 
-## initialise config parser
-config = ConfigParser.RawConfigParser()
-config.read("StarinetBeagleLogger.conf")
-
-## initialise globals
-rate = int(config.get('capture', 'rate').lstrip("0"))
-strrate = config.get('capture', 'rate')
-datafolder = config.get("paths", "datafolder")
-
-## initialise next_call
-next_call = time.time()
-lock = threading.Lock()
 
 ##initialise logger
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                        filename=config.get('sampler', 'samplerlogfile'),
-                        level=logging.INFO)
+logger = logging.getLogger('actions.capture')
+
+config = ConfigParser.RawConfigParser()
 
 
-def mylogger():
-    
-    lock.acquire()
+def control(buffer0):
 
-    global ptn
-    global next_call
-    global rate
-    global datafolder
-    global datafile 
-    global strrate
+    status = None
+    value = None
 
-    # immediately set schedule of next sample.
-    next_call += rate
-    threading.Timer(next_call - time.time(), mylogger).start()
+    config.read("StarinetBeagleLogger.conf")
 
-    #open datafile
-    f = open(datafolder + datafile, 'rb')
+    logger.debug("%s %s", "Capture buffer0 ", buffer0)
 
-    #set the first sample time stamp
-    stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if buffer0 == 'true':
 
+        logger.debug("Entered true routine")
+        if samplerstatus.status() == 8000:
+            logger.debug("%s %s", "samplerstatus reports sampler active", str(samplerstatus.status()))
+            status = 8002
+        elif samplerstatus.status() == 0:
+            logger.debug("%s %s", "samplerstatus reports sampler not active", str(samplerstatus.status()))
+            
+            folder = config.get('paths', 'datafolder')
 
-    f.readline()
+            logger.debug("%s %s", "systemstate capture", config.get('systemstate', 'capture'))
 
-    if f.tell() == 0:
-        f = open(datafolder + datafile, 'ab')
-        samplerdata = ''.join(readadc.read())
-        data = str(stamp) + ' ' + temperature.read() + ' ' + strrate + '   ' + \
-            str(samplerdata)
-        f.write(data)
-        f.close()
-    elif f.tell() == 512:
-        ptn += 1
-        datafile = hex(ptn).split('x')[1].upper().zfill(4)  # change filenumber to hex
+            if config.get('systemstate', 'capture') == 'false':
+                logger.debug('%s', 'Removing previous data files - capture started')
+                for the_file in os.listdir(folder):
+                    file_path = os.path.join(folder, the_file)
+                    try:
+                        if os.path.isfile(file_path):
+                                os.unlink(file_path)
+                        logger.debug("%s %s", "Removing data file ", file_path)
+                    except OSError as e:
+                            logger.critical("%s %s", "premature termination", e)
+                            status = 4
 
-        if datafile == 'FFFE':
+                f = open(config.get("paths", "datafolder") + '0000', 'wb')
+                f.close()
+            
             try:
-                pidfile = open(config.get('paths', 'pidfile'), 'r')
-                pid = int(pidfile.read())
-                pidfile.close()
+                pro = subprocess.Popen(["/usr/bin/python", "logger/sampler.py"])
             except IOError as e:
-                print "Unable to assign pid to pro.pid capture.py"
+                logger.critical("%s %s", "premature termination", e)
+                logger.critical("Unable to start capture")
+                status = 4
+
+                config.set('systemstate', 'capture', 'false')
+
+                with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                            config.write(configfile)
+                            configfile.close()
+
             else:
                 try:
-                    os.remove(str(config.get('paths', 'pidfile')))
-                except OSError as e:
-                        print "Unable to remove pid file fatal error", e
+                    pidfile = open(config.get('paths', 'pidfile'), 'w')
+                    pidfile.write(str(pro.pid))
+                    pidfile.close()
+                except IOError as e:   
+                    logger.critical("%s %s", "premature termination", e)
+                    logger.critical("Unable to create pid file")
+                    status = 4
+                else:
+                    logger.debug("Started logger/sampler ....")
+
+                    config.set('systemstate', 'capture', buffer0)
+
+                    with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                                config.write(configfile)
+                                configfile.close()
+
+                    status = 0
+        else:
+            logger.debug("premature termination")
+            status = 4
+
+    elif buffer0 == 'false':
+
+        logger.debug("Entered false routine")
+
+        if samplerstatus.status() == 0:
+            logger.debug("%s %s", "samplerstatus reports sampler not active", str(samplerstatus.status()))
+            status = 0
+        elif samplerstatus.status() == 8000:
+            logger.debug("%s %s", "samplerstatus reports sampler active", str(samplerstatus.status()))
+
+            if publisherstatus.status() == 0:
+                logger.debug("%s %s", "publisher running terminating first", str(publisherstatus.status()))
+
+                config.read("StarinetBeagleLogger.conf")
+
+                config.set('systemstate', 'publisher', buffer0)
+
+                with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                    config.write(configfile)
+                    configfile.close()
+
+                try:
+                    pidfile = open(config.get('publisher', 'pidfile'), 'r')
+                    pid = int(pidfile.read())
+                    pidfile.close()
+                    logger.debug("%s %s %s", "publisher.combined pidfile and pid - ", str(pidfile), str(pid))
+                except IOError as e:
+                    logger.critical("%s %s", "Unable to assign pid to pro.pid capturePublisher.py", e)
                 else:
                     try:
                         os.kill(pid, signal.SIGTERM)
                     except OSError as e:
-                        print "Unable to kill process logger/sampler"
+                        logger.debug("%s %s", "Unable to kill process publisher.combined", e)
+                    else:
+                        try:
+                            os.remove(str(config.get('publisher', 'pidfile')))
+                        except OSError as e:
+                            logger.critical("%s %s", "Unable to remove pid file fatal error", e)
+                        else:
+                            pass
 
+            try:
+                pidfile = open(config.get('paths', 'pidfile'), 'r')
+                pid = int(pidfile.read())
+                pidfile.close()
+                logger.debug("%s %s %s", "logger/sampler pidfile and pid - ", str(pidfile), str(pid))
+            except IOError as e:
+                logger.critical("%s %s", "Unable to assign pid to pro.pid capture.py", e)
+                status = 4
+            else:
+                try:
+                    os.kill(pid, signal.SIGTERM)
+                except OSError as e:
+                    logger.debug("%s %s", "Unable to kill process logger/sampler", e)
+                    status = 4
+                else:
+                    try:
+                        os.remove(str(config.get('paths', 'pidfile')))
+                    except OSError as e:
+                        logger.critical("%s %s", "Unable to remove pid file fatal error", e)
+                        status = 4
+                    else:
+                        config.read("StarinetBeagleLogger.conf")
 
+                        config.set('systemstate', 'capture', buffer0)
 
-        f = open(datafolder + datafile, 'wb')
-        samplerdata = ''.join(readadc.read())
-        data = str(stamp) + ' ' + temperature.read() + ' ' + strrate + '   ' + \
-            str(samplerdata)
-        f.write(data)
-        f.close()
+                        with open('StarinetBeagleLogger.conf', 'wb') as configfile:
+                            config.write(configfile)
+                            configfile.close()
+
+                        status = 0
+
     else:
-        f = open(datafolder + datafile, 'ab')
-        samplerdata = ''.join(readadc.read())
-        data = str(samplerdata)
-        f.write(data)
-        f.close()
-        
-    lock.release()
+        logger.critical("invalid parameter")
+        status = 8
 
-datafile0000 = datafolder + '0000'
+    return status, value
 
-print 'datafile = ', datafile0000
-
-if os.stat(datafile0000)[6] == 0:  # check to see if first data file is zero bytes.
-    logger.info("%s", "Data Block 0000 is zero bytes starting sampler")
-    datafile = '0000'
-    ptn = 0
-    mylogger()
-else:  # As first data file was zero bytes assume we're doing a restart after power outage
-    logger.info("%s", "Restart after fatal error or power outage")
-    logger.info("%s", "Data Block 0000 is not zero bytes")
-    # Find number of last block in data folder and increase by 1
-    newblock = int(max(os.listdir(config.get("paths", "datafolder")),
-                        key=lambda p: os.path.getctime(os.path.join(
-                        config.get("paths", "datafolder"), p))), 16) + 1
-    
-    ptn = newblock  # set ptn number to last block plus one.
-    print "ptn = ", str(ptn)
-    datafile = str(hex(newblock).split('x')[1].upper().zfill(4))  # our new datafile in hex
-    logger.info("%s %s", "Next new data block is ", datafile) 
-
-    ###############
-    # Get the lastblock written too and read block and assign to block
-
-    lastblock = str(max(os.listdir(config.get("paths", "datafolder")),
-                        key=lambda p: os.path.getctime(os.path.join(
-                        config.get("paths", "datafolder"), p))))  # find the lastblock so we can extract date time str
-
-    fileblock = open(config.get("paths", "datafolder") + lastblock, 'rb')  # open the lastblock that was written too
-
-    block = fileblock.read().strip('\x02\x1F\x04\r\n\x00')  # read contents of datafile stripping control characters.
-
-    fileblock.close()
-
-    #  Assign date time string to lastdatelst list
-
-    lastdatelst = re.findall('^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}', block)  # find date time string
-
-    # split lastdatelst into lastdate and lasttime
-
-    splitdatetimelst = str.split(str(lastdatelst[0]), ' ') # split lastdatelst on space
-
-    fmtdate = splitdatetimelst[0].split('-')  # split date field on hyphen
-    fmttime = splitdatetimelst[1].split(':')  # split time field on colon
-
-    # create date time object
-    lasttimestamp = datetime.datetime(int(fmtdate[0]),int(fmtdate[1]),int(fmtdate[2]),int(fmttime[0]),int(fmttime[1]),int(fmttime[2]))
-
-    #################################################
-    # increase lasttimestamp by (sample rate * 40)
-    # There could be issues doing this as below as I'm not sure what would happen in the case of the day rolling over
-
-    xtime = int(config.get('capture', 'rate').lstrip("0")) * 40
-    nexttimestamp = lasttimestamp + datetime.timedelta(0, xtime)
-
-    # get current time and check that's in excess of the nexttimestamp
-
-    currentdatetime = datetime.datetime.now()
-
-    while currentdatetime < nexttimestamp:
-        time.sleep(xtime)
-    else:
-        stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-
-    #
-    ##################################################
-
-    f = open(config.get("paths", "datafolder") + datafile, 'wb')
-
-    data = str(stamp) + ' ' + temperature.read() + ' ' + strrate + '   '
-    f.write(data)        
-    f.close()
-
-    mylogger()
+if __name__ == "__main__":
+    print control(str(sys.argv[1:]))
