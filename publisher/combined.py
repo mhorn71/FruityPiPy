@@ -27,6 +27,8 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                         level=logging.CRITICAL,
                         filemode='a')
 
+logger = logging.getLogger(__name__)
+
 label0 = config.get("publisherlabels", "channel0")
 label1 = config.get("publisherlabels", "channel1")
 label2 = config.get("publisherlabels", "channel2")

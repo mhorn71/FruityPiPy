@@ -32,6 +32,8 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                         level=logging.CRITICAL,
                         filemode='a')
 
+logger = logging.getLogger(__name__)
+
 logger.debug("%s %s", "Sample rate set to - ", str(rate))
 
 def mylogger():
@@ -109,8 +111,6 @@ def mylogger():
     lock.release()
 
 datafile0000 = datafolder + '0000'
-
-print 'datafile = ', datafile0000
 
 if os.stat(datafile0000)[6] == 0:  # check to see if first data file is zero bytes.
     logger.debug("%s", "Data Block 0000 is zero bytes starting sampler")
