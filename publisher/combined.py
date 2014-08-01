@@ -13,10 +13,19 @@ import threading
 import ftplib
 import gc
 from matplotlib.ticker import MaxNLocator
+import logging
 
 
 config = ConfigParser.RawConfigParser()
 config.read("StarinetBeagleLogger.conf")
+
+##initialise logger
+## If you want to see debugging info change level=logging.CRITICAL to level=logging.DEBUG
+## Make sure you change the level back to CRITICAL as logfile does not auto rotate.
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                        filename=config.get('logfiles', 'publisherlogfile'),
+                        level=logging.CRITICAL,
+                        filemode='a')
 
 label0 = config.get("publisherlabels", "channel0")
 label1 = config.get("publisherlabels", "channel1")
@@ -75,9 +84,9 @@ def mypublisher():
     #immediatly set schedule of next sample.
     global next_call
     interval = int(config.get('publisher', 'interval').lstrip("0"))
-    #print "Interval set to - ", interval
+    logger.debug("%s %s", "Interval set to - ", str(interval))
     rate = interval * 60
-    #print "Rate has been converted to seconds - ", rate
+    logger.debug("%s %s", "Rate has been converted to seconds - ", str(rate))
     next_call += rate
     threading.Timer(next_call - time.time(), mypublisher).start()
 
@@ -100,7 +109,7 @@ def mypublisher():
             file.close()                                    # close file and FTP
             session.quit()
         except ftplib.all_errors as e:
-            print "We had an FTP Error - ", e
+            logger.error("%s %s", "We had an FTP Error - ", e)
         else:
             gc.collect()
 
@@ -165,7 +174,7 @@ def mypublisher():
             plt.close('all')
 
         except Exception as e:
-            print "We had a matplotlib error - ", e
+            logger.error("%s %s", "We had a matplotlib error - ", e)
         else:
             myftp()
 
@@ -254,42 +263,42 @@ def mypublisher():
             # experimental plt.close see if it helps with memory?
             plt.close('all')
         except Exception as e:
-            print "stacked Exception - ", e
+            logger.error("%s %s", "stacked Exception - ", e)
         else:
             myftp()
 
     # find all files in memory/data and get creation time
 
     def get_information(directory):
-        #print "Find all files created in last 24 hours in ", directory
+        logger.debug("%s %s", "Find all files created in last 24 hours in ", directory)
         file_list = []
         for i in os.listdir(directory):
-            ##print "os.listdir reports ", i
+            logger.debug("%s %s", "os.listdir reports ", i)
             a = str(os.path.join(directory,i))
-            ##print "os.path.join report ", a
+            logger.debug("%s %s", "os.path.join report ", a)
             file_list.append([a,os.path.getctime(a)])  #[file,created]
-            ##print "file_list data is ", file_list
+            logger.debug("%s %s", "file_list data is ", file_list)
             file_list.sort()
         return file_list
 
     for _file in get_information(config.get('paths', 'datafolder')):
 
-        #print "_file is set to ", _file
+        logger.debug("%s %s", "_file is set to ", _file)
 
         timenow = time.time()  # get the current Unix time
         timespan = 86400  # time in seconds (24 Hours) of chart
         dawn = timenow - timespan  # start Unix time of chart
 
-        #print "time now ", timenow
-        #print "time span ", timespan
-        #print "dawn ", dawn
-        #print "file[0] ", _file[0]
-        #print "file[1] ", _file[1]
+        logger.debug("%s %s", "time now ", timenow)
+        logger.debug("%s %s", "time span ", timespan)
+        logger.debug("%s %s", "dawn ", dawn)
+        logger.debug("%s %s", "file[0] ", _file[0])
+        logger.debug("%s %s", "file[1] ", _file[1])
 
         if float(_file[1]) >= dawn:
             block = open(_file[0]).readline().split(' ')
 
-            #print "block ", block
+            logger.debug("%s %s", "block ", block)
 
             # create datetime object
             n = str(block[0]).split('-')  # split date field up
@@ -298,21 +307,21 @@ def mypublisher():
 
             #dt = str(block[0]) + ',' + str(block[1])
 
-            #print "dt set to ", dt
-            ##print "block[6] ", block[6]
+            logger.debug("%s %s", "dt set to ", dt)
+            logger.debug("%s %s", "block[6] ", block[6])
 
             for datum in re.findall('\d{12}', block[6]):  # for every group of 16 digits
                 dat = re.findall('....', str(datum))   # split each 16 digits into groups of 4
                 sampletime.append(dt)  # append current datetime object to sampletime
-                #print "date set to - ", dt
+                logger.debug("%s %s", "date set to - ", dt)
                 channel0.append(int(dat[0]))  # append data to channel arrays
                 channel1.append(int(dat[1]))
                 channel2.append(int(dat[2]))
                 temperature.append(block[2])  # append temperature to temperature array
-                #print "temperature set to - ", block[2]
+                logger.debug("%s %s", "temperature set to - ", block[2])
 
                 dt = dt + datetime.timedelta(seconds=samplerate)  # create next sample datetime object based on get.config rate
-                #print "New dt is set to - ", dt
+                logger.debug("%s %s", "New dt is set to - ", dt)
 
     if config.get('publisherartist', 'chart') == 'combined':
         combined(sampletime,channel0,channel1,channel2,temperature)

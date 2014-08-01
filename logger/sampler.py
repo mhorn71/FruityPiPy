@@ -28,7 +28,7 @@ lock = threading.Lock()
 ## If you want to see debugging info change level=logging.CRITICAL to level=logging.DEBUG
 ## Make sure you change the level back to CRITICAL as logfile does not auto rotate.
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                        filename=config.get('paths', 'samplerlogfile'),
+                        filename=config.get('logfiles', 'samplerlogfile'),
                         level=logging.CRITICAL,
                         filemode='a')
 
