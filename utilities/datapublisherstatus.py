@@ -26,13 +26,13 @@ def status():
         proc = psutil.Process(p)
         f.close()
     except IOError:
-        logger.debug("No pidfile present")
+        logger.error("No pidfile present")
         value = 1
     except psutil.NoSuchProcess:
-        logger.debug("psuti.Process returned no pidfile")
+        logger.error("psuti.Process returned no pidfile")
         value = 1
     except ValueError as e:
-        logger.debug("psuti.Process returned no value from pidfile")
+        logger.error("psuti.Process returned no value from pidfile")
         os.remove(config.get('datapublisher', 'pidfile'))
         value = 1
     else:
@@ -40,7 +40,7 @@ def status():
         try:
             b = proc.cmdline()[1]
         except IndexError as e:
-            logger.debug("proc.cmdline returned no value from pidfile")
+            logger.error("proc.cmdline returned no value from pidfile")
             os.remove(config.get('datapublisher', 'pidfile'))
             value = 1
         else:
@@ -49,7 +49,7 @@ def status():
                     try:
                         os.remove(config.get('datapublisher', 'pidfile'))
                     except IOError as e:
-                        logger.debug("%s %s", "Unable to remove pid file fatal error", e)
+                        logger.error("%s %s", "Unable to remove pid file fatal error", e)
                         value = 2
                 else:
                     value = 0
@@ -57,7 +57,7 @@ def status():
                 try:
                     os.remove(config.get('datapublisher', 'pidfile'))
                 except IOError as e:
-                    logger.debug("%s %s", "Unable to remove pid file fatal error", e)
+                    logger.error("%s %s", "Unable to remove pid file fatal error", e)
                     value = 2
                 else:
                     value = 0
