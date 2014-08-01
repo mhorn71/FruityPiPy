@@ -130,7 +130,50 @@ else:  # As first data file was zero bytes assume we're doing a restart after po
     datafile = str(hex(newblock).split('x')[1].upper().zfill(4))  # our new datafile in hex
     logger.debug("%s %s", "Next new data block is ", datafile)
 
-    stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    ###############
+    # Get the lastblock written too and read block and assign to block
+
+    lastblock = str(max(os.listdir(config.get("paths", "datafolder")),
+                        key=lambda p: os.path.getctime(os.path.join(
+                        config.get("paths", "datafolder"), p)))) # find the lastblock so we can extract date time str
+
+    fileblock = open(config.get("paths", "datafolder") + lastblock, 'rb') # open the lastblock that was written too
+
+    block = fileblock.read().strip('\x02\x1F\x04\r\n\x00') # read contents of datafile stripping control characters.
+
+    fileblock.close()
+
+    # Assign date time string to lastdatelst list
+
+    lastdatelst = re.findall('^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}', block) # find date time string
+
+    # split lastdatelst into lastdate and lasttime
+
+    splitdatetimelst = str.split(str(lastdatelst[0]), ' ') # split lastdatelst on space
+
+    fmtdate = splitdatetimelst[0].split('-') # split date field on hyphen
+    fmttime = splitdatetimelst[1].split(':') # split time field on colon
+
+    # create date time object
+    lasttimestamp = datetime.datetime(int(fmtdate[0]),int(fmtdate[1]),int(fmtdate[2]),int(fmttime[0]),int(fmttime[1]),int(fmttime[2]))
+
+    #################################################
+    # increase lasttimestamp by (sample rate * 40)
+    # There could be issues doing this as below as I'm not sure what would happen in the case of the day rolling over
+
+    xtime = int(config.get('capture', 'rate').lstrip("0")) * 40
+    nexttimestamp = lasttimestamp + datetime.timedelta(0, xtime)
+
+    # get current time and check that's in excess of the nexttimestamp
+
+    currentdatetime = datetime.datetime.now()
+
+    while currentdatetime < nexttimestamp:
+        time.sleep(xtime)
+    else:
+        stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
 
     f = open(config.get("paths", "datafolder") + datafile, 'wb')
 
