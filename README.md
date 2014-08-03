@@ -10,6 +10,9 @@ FruityPiPy has been developed on Raspbian and cannot be guaranteed to work on an
 
     http://www.raspberrypi.org/downloads/
 
+    Please note you need version June 2014 or greater, any other version can not be
+    guaranteed to work and is unsupported.
+
 You need to install the following additional python packages.
 
     You can install the above using apt-get and pip as the root user or using sudo with the following
