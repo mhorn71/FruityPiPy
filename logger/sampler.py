@@ -59,12 +59,9 @@ def mylogger():
     stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Set space between sample rate and start of samples
-    if len(strrate) == 1:
-        space = '   '
-    elif len(strrate) == 2:
-        space = '  '
-    else:
-        space = ' '
+
+    space = '  '
+
 
 
     f.readline()
