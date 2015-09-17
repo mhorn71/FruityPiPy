@@ -31,7 +31,7 @@ def control(buffer0):
 
     nx = publisherstatus.status()
 
-    if buffer0 == 'Y':
+    if buffer0 == 'true':
 
         logger.debug("Entered true routine")
 
@@ -72,7 +72,7 @@ def control(buffer0):
             status = 4
             value = 'unable to ascertain publisher status'
 
-    elif buffer0 == 'N':
+    elif buffer0 == 'false':
 
         logger.debug("Entered false routine")
 
